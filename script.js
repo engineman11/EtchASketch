@@ -6,7 +6,7 @@ let b
 const body = document.body; 
 body.setAttribute("draggable", false);
 body.style.cssText =
-"background-color: rgba(0,0,0,0.9); margin: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center"
+" background: rgb(255,80,80); background: linear-gradient(45deg, rgba(255,80,80,1) 0%, rgba(249,255,80,1) 26%, rgba(116,255,130,1) 51%, rgba(97,172,255,1) 77%, rgba(194,50,255,1) 100%); ; margin: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center"
 
 const container =  document.createElement("div");
 container.classList.add("container");
@@ -41,7 +41,7 @@ function colorBoxWhite(box) {
 }
 
 function createCanvas() {
-    canvas.style.cssText = `height: 90vh; width: 90vh; grid-template-columns: repeat(${times}, auto); display: grid`;
+    canvas.style.cssText = `box-shadow: 0 0 10px black; height: 90vh; width: 90vh; grid-template-columns: repeat(${times}, auto); display: grid`;
     canvas.setAttribute("draggable", false)
     canvas.onselectstart = function () { return false; }
     for (let i = 0; i < times * times; i++) {
@@ -59,23 +59,20 @@ document.addEventListener('pointerdown', mouseDownListener, true);
 document.addEventListener('pointerup', mouseUpListener, true);
 
 function mouseDownListener(e) {
-    canvas.addEventListener('pointerenter', mouseMoveListener, true);
+    canvas.addEventListener('pointerover', mouseMoveListener, true);
+    canvas.addEventListener('pointerdown', mouseMoveListener, true);
 }
 
 function mouseUpListener(e) {
-    canvas.removeEventListener('pointerenter', mouseMoveListener, true);
+    canvas.removeEventListener('pointerover', mouseMoveListener, true);
+    canvas.removeEventListener('pointerdown', mouseMoveListener, true);
+
 }    
 
 let mouseMoveListener
 
 function setPenBlack() {
     mouseMoveListener = function(event) {
-
-        color = event.target.style.backgroundColor.valueOf();
-        colorValues(color)     
-        r = colorValues(color)[0] - 255
-        g = colorValues(color)[1] - 255
-        b = colorValues(color)[2] - 255
         r=0
         g=0
         b=0
@@ -94,27 +91,28 @@ function setPenDarken() {
     }  
 }
 
-function setPenRGB() {        
+
+// one 255, one 100, other in between 
+// make first 255, 100 or random >> make other depending on that
+function setPenPastel() {        
     mouseMoveListener = function(event) {
-        color = event.target.style.backgroundColor.valueOf();
-        colorValues(color)     
-        r = colorValues(color)[0] - 255
-        g = colorValues(color)[1] - 255
-        b = colorValues(color)[2] - 255
-        r = Math.round(Math.random() * 255)
-        g = Math.round(Math.random() * 255)
-        b = Math.round(Math.random() * 255)
+        r = 255 - (Math.round(Math.random() * 155));
+        if (r < 155) {
+            g = 255 - (Math.round(Math.random() * 55))
+            b = 255 - Math.round(Math.random() * 100)
+        } else if (r > 200) {
+            g = 255 - (Math.round(Math.random() * 100)) 
+            b = 100 + Math.round(Math.random() *55)
+        } else {
+            g = 100 + (Math.round(Math.random() * 55)) 
+            b = 255 - Math.round(Math.random() * 55)
+        }
         event.target.style.cssText = `background-color: rgb(${r},${g},${b})`
     }  
 }
 
 function setPenEraser() {        
     mouseMoveListener = function(event) {
-        color = event.target.style.backgroundColor.valueOf();
-        colorValues(color)     
-        r = colorValues(color)[0] - 255
-        g = colorValues(color)[1] - 255
-        b = colorValues(color)[2] - 255
         r=255
         g=255
         b=255
@@ -131,19 +129,19 @@ const buttonBlack = document.createElement("button");
 buttonBlack.classList.add("button");
 buttonBlack.textContent = "Black Pen";
 buttons.appendChild(buttonBlack);
-buttonBlack.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
+buttonBlack.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center;"
 
 const buttonDarken = document.createElement("button");
 buttonDarken.classList.add("button");
 buttonDarken.textContent = "Shading Pen";
 buttons.appendChild(buttonDarken);
-buttonDarken.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
+buttonDarken.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center;"
 
-const buttonRGB = document.createElement("button");
-buttonRGB.classList.add("button");
-buttonRGB.textContent = "RGB Pen";
-buttons.appendChild(buttonRGB);
-buttonRGB.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
+const buttonPastel = document.createElement("button");
+buttonPastel.classList.add("button");
+buttonPastel.textContent = "Pastel Pen";
+buttons.appendChild(buttonPastel);
+buttonPastel.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
 
 const buttonEraser = document.createElement("button");
 buttonEraser.classList.add("button");
@@ -178,7 +176,7 @@ buttonTimes64.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-
 buttonBlack.addEventListener("click", () => {
     buttonBlack.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; border: solid; border-color: red; border-radius: 6px; text-align: center"
     buttonDarken.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
-    buttonRGB.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
+    buttonPastel.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     buttonEraser.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     setPenBlack();
 });
@@ -186,23 +184,23 @@ buttonBlack.addEventListener("click", () => {
 buttonDarken.addEventListener("click", () => {
     buttonBlack.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     buttonDarken.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; border: solid; border-color: red; border-radius: 6px; text-align: center"
-    buttonRGB.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
+    buttonPastel.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     buttonEraser.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     setPenDarken();
 });
 
-buttonRGB.addEventListener("click", () => {
+buttonPastel.addEventListener("click", () => {
     buttonBlack.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     buttonDarken.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
-    buttonRGB.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; border: solid; border-color: red; border-radius: 6px; text-align: center"
+    buttonPastel.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; border: solid; border-color: red; border-radius: 6px; text-align: center"
     buttonEraser.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
-    setPenRGB();
+    setPenPastel();
 });
 
 buttonEraser.addEventListener("click", () => {
     buttonBlack.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     buttonDarken.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
-    buttonRGB.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
+    buttonPastel.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; text-align: center"
     buttonEraser.style.cssText = "margin = 1vh auto; height: 7vh; width: 7vw; border: solid; border-color: red; border-radius: 6px; text-align: center"
     setPenEraser();
 });
