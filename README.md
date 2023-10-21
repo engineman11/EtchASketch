@@ -3,3 +3,8 @@
 This is a Etch-A-Sketch project created solely with JS, without a .css file.
 
 Purpose: Learning DOM manipulation.
+
+
+### Preview
+
+![Preview](/preview.png/)
