@@ -1,4 +1,4 @@
-Project Number 0x01:
+### Project Number 0x01: Etch A Sketch
 
 
 ## **[EtchASketch Live Demo](https://engineman11.github.io/EtchASketch/)**
